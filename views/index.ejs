@@ -31,7 +31,7 @@
             <img class="card-img-top" src="<%=dataBike[i].img%>">
             <div class="card-body">
               <h5 class="card-title"><%=dataBike[i].nom%></h5>
-              <span class="shop-price"><%=dataBike[i].prix%></span>
+              <span class="shop-price"><%=dataBike[i].prix%>€</span>
               <form method="POST" action="/add-shop">
                 <input type="hidden" name="nom" value="<%=dataBike[i].nom%>">
                 <input type="hidden" name="prix" value="<%=dataBike[i].prix%>">
