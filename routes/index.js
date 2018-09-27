@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
-var dataCardBike = [];
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+
   dataBike = [
     {nom: 'Model BIKO45', prix: 679, img: "/images/bike-1.jpg"},
     {nom: 'Model ZOOK7', prix: 799, img: "/images/bike-2.jpg"},
@@ -27,7 +27,6 @@ router.get('/shop', function(req, res, next) {
 
 /* GET purchase basket with addition of new bicycle*/
 router.post('/add-shop', function(req, res, next) {
-
   console.log(req.body);
   console.log(req.body.quantity);
   console.log(req.session.dataCardBike);
