@@ -25,13 +25,25 @@ router.get('/shop', function(req, res, next) {
   res.render('shop', {dataCardBike: req.session.dataCardBike});
 });
 
+let statusLog = false;
+
 /* GET purchase basket with addition of new bicycle*/
 router.post('/add-shop', function(req, res, next) {
   console.log(req.body);
   console.log(req.body.quantity);
   console.log(req.session.dataCardBike);
+
+for(var i=0; i<req.session.dataCardBike.length; i++) {
+  if(req.session.dataCardBike[i].nom == req.body.nom) {
+    req.session.dataCardBike[i].quantity++;
+    statusLog = true;
+  }
+}
+if(statusLog == false) {
   req.session.dataCardBike.push(req.body);
-  res.render('shop', {dataCardBike: req.session.dataCardBike});
+}
+
+res.render('shop', {dataCardBike: req.session.dataCardBike});
 });
 
 /* Update quantity of bicycles in basket */
