@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var stripe = require("stripe")("sk_test_igkSgmeuQg7NcVTHS3gP6mlO");
 
 
 /* GET home page. */
@@ -27,7 +28,7 @@ router.get('/shop', function(req, res, next) {
 
 
 
-/* GET purchase basket with addition of new bicycle*/
+/* POST purchase basket with addition of new bicycle*/
 router.post('/add-shop', function(req, res, next) {
   console.log(req.body);
   console.log(req.body.quantity);
@@ -54,11 +55,34 @@ router.post('/user-update', function(req, res, next) {
   res.render('shop', {dataCardBike: req.session.dataCardBike});
 });
 
-/* GET delete bicycle */
+/* POST delete bicycle */
 router.post('/delete-shop', function(req, res, next) {
   console.log("log de mon indice body ---->",req.body.k);
   req.session.dataCardBike.splice(req.body.k,1);
   res.render('shop', {dataCardBike: req.session.dataCardBike});
+});
+
+/* POST checkout process */
+router.post('/checkout', function(req, res, next) {
+  console.log(req.body);
+  var totalAmount = 0;
+  var desc = '';
+  for (var p=0; p<req.session.dataCardBike.length; p++) {
+    desc = desc + req.session.dataCardBike[p].quantity+req.session.dataCardBike[p].nom;
+    totalAmount += (req.session.dataCardBike[p].quantity*req.session.dataCardBike[p].prix*100);
+  }
+  // Token is created using Checkout or Elements!
+  // Get the payment token ID submitted by the form:
+  const token = req.body.stripeToken; // Using Express
+
+  const charge = stripe.charges.create({
+    amount: totalAmount,
+    currency: 'eur',
+    description: desc,
+    source: token,
+  });
+
+  res.render('confirmationCommande', {});
 });
 
 module.exports = router;
